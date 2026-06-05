@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timepass Hub - Version 1</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg:#090b12; --card:rgba(255,255,255,.08); --border:rgba(255,255,255,.16); --text:#fff; --muted:rgba(255,255,255,.72); --accent:#7c5cff; --accent2:#00d4ff; }
+    body { min-height:100vh; font-family:Arial,Helvetica,sans-serif; background:radial-gradient(circle at top left,rgba(124,92,255,.35),transparent 32%),radial-gradient(circle at bottom right,rgba(0,212,255,.22),transparent 32%),var(--bg); color:var(--text); }
+    button,input,select { font:inherit; } button { cursor:pointer; border:none; }
+    .app { min-height:100vh; padding:24px; }
+    .topbar { max-width:1150px; margin:0 auto 28px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:900; letter-spacing:.5px; }
+    .logo { width:42px; height:42px; border-radius:14px; display:grid; place-items:center; background:linear-gradient(135deg,var(--accent),var(--accent2)); box-shadow:0 0 30px rgba(124,92,255,.45); }
+    .pill { padding:9px 14px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid var(--border); color:var(--muted); font-size:14px; }
+    .hero { max-width:1150px; margin:0 auto 24px; padding:42px; border-radius:32px; background:rgba(255,255,255,.075); border:1px solid var(--border); backdrop-filter:blur(14px); box-shadow:0 24px 70px rgba(0,0,0,.35); }
+    .hero h1 { font-size:clamp(42px,7vw,84px); line-height:.98; margin-bottom:16px; }
+    .hero p { color:var(--muted); font-size:18px; max-width:720px; line-height:1.6; }
+    .stats { display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
+    .stat { min-width:145px; padding:14px 16px; border-radius:18px; background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.12); }
+    .stat strong { display:block; font-size:22px; } .stat span { color:var(--muted); font-size:13px; }
+    .hub { max-width:1150px; margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
+    .game-card { min-height:190px; border-radius:24px; padding:20px; color:#fff; text-align:left; background:var(--card); border:1px solid var(--border); transition:.2s; display:flex; flex-direction:column; justify-content:space-between; }
+    .game-card:hover { transform:translateY(-7px); border-color:rgba(255,255,255,.38); background:rgba(255,255,255,.13); }
+    .game-icon { font-size:34px; margin-bottom:12px; } .game-card h3 { font-size:20px; margin-bottom:8px; } .game-card p { color:var(--muted); font-size:14px; line-height:1.4; } .play-label { margin-top:18px; display:inline-block; color:#fff; font-weight:800; }
+    .screen { display:none; max-width:900px; margin:0 auto; } .screen.active { display:block; }
+    .game-panel { margin-top:20px; padding:28px; border-radius:30px; background:rgba(255,255,255,.08); border:1px solid var(--border); backdrop-filter:blur(14px); box-shadow:0 24px 70px rgba(0,0,0,.3); }
+    .game-header { display:flex; justify-content:space-between; align-items:center; gap:14px; margin-bottom:22px; } .game-header h2 { font-size:clamp(30px,5vw,54px); }
+    .back-btn { padding:11px 16px; border-radius:999px; background:#fff; color:#111; font-weight:900; }
+    .result-box { min-height:150px; display:grid; place-items:center; text-align:center; padding:24px; border-radius:22px; background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.12); font-size:clamp(24px,5vw,44px); font-weight:900; line-height:1.25; margin-bottom:18px; }
+    .primary-btn { width:100%; padding:16px 20px; border-radius:18px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-weight:900; font-size:18px; box-shadow:0 12px 30px rgba(124,92,255,.25); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; } .choice-btn { flex:1; min-width:140px; padding:18px; border-radius:18px; background:rgba(255,255,255,.10); color:#fff; border:1px solid var(--border); font-weight:900; font-size:18px; } .choice-btn:hover { background:rgba(255,255,255,.18); }
+    .scoreboard { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px; } .score { text-align:center; padding:16px; border-radius:18px; background:rgba(0,0,0,.24); border:1px solid rgba(255,255,255,.12); } .score strong { display:block; font-size:26px; } .score span { color:var(--muted); font-size:13px; }
+    .reaction-box { min-height:330px; border-radius:28px; display:grid; place-items:center; text-align:center; padding:24px; background:#202331; border:1px solid var(--border); font-size:clamp(28px,5vw,52px); font-weight:900; margin-bottom:18px; cursor:pointer; user-select:none; }
+    .reaction-box.waiting { background:#8c1f3d; } .reaction-box.ready { background:#008f5a; }
+    .small-note { margin-top:12px; color:var(--muted); font-size:14px; line-height:1.5; }
+    .table-section { max-width:1150px; margin:24px auto 0; padding:24px; border-radius:24px; background:rgba(255,255,255,.07); border:1px solid var(--border); overflow-x:auto; } .table-section h2 { margin-bottom:16px; }
+    table { width:100%; min-width:720px; border-collapse:collapse; overflow:hidden; border-radius:18px; } th,td { padding:16px; text-align:left; border-bottom:1px solid rgba(255,255,255,.12); } th { background:rgba(255,255,255,.10); } td { color:var(--muted); }
+    .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:900; color:#fff; background:rgba(124,92,255,.8); }
+    @media (max-width:1000px){ .hub{grid-template-columns:repeat(3,1fr);} }
+    @media (max-width:720px){ .app{padding:16px;} .topbar{align-items:flex-start; flex-direction:column;} .hero{padding:28px;} .hub{grid-template-columns:1fr;} .game-header{align-items:flex-start; flex-direction:column-reverse;} .back-btn{width:100%;} .scoreboard{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="topbar"><div class="brand"><div class="logo">🎮</div><div>Priyank's Timepass Hub</div></div><div class="pill">Version 1: 5 mini projects</div></div>
+    <section id="homeScreen">
+      <div class="hero"><h1>Pick something fun.</h1><p>A simple GitHub Pages friendly website built with only HTML, CSS, and JavaScript. Start with these 5 mini projects, then keep adding more.</p><div class="stats"><div class="stat"><strong>5</strong><span>Projects added</span></div><div class="stat"><strong>0</strong><span>Backend needed</span></div><div class="stat"><strong>100%</strong><span>Browser based</span></div></div></div>
+      <div class="hub">
+        <button class="game-card" data-open="jokeScreen"><div><div class="game-icon">😂</div><h3>Joke Generator</h3><p>Click a button and get a random silly joke.</p></div><span class="play-label">Play →</span></button>
+        <button class="game-card" data-open="truthScreen"><div><div class="game-icon">🎲</div><h3>Truth or Dare</h3><p>Generate random truth and dare prompts.</p></div><span class="play-label">Play →</span></button>
+        <button class="game-card" data-open="rpsScreen"><div><div class="game-icon">✊</div><h3>Rock Paper Scissors</h3><p>Play against the computer and track score.</p></div><span class="play-label">Play →</span></button>
+        <button class="game-card" data-open="reactionScreen"><div><div class="game-icon">⚡</div><h3>Reaction Time</h3><p>Wait for green, then click as fast as possible.</p></div><span class="play-label">Play →</span></button>
+        <button class="game-card" data-open="eightBallScreen"><div><div class="game-icon">🔮</div><h3>Magic 8-Ball</h3><p>Ask a question and receive a mysterious answer.</p></div><span class="play-label">Play →</span></button>
+      </div>
+      <section class="table-section"><h2>Project Tracker</h2><table><thead><tr><th>#</th><th>Project</th><th>Category</th><th>Difficulty</th><th>Status</th></tr></thead><tbody><tr><td>1</td><td>Joke Generator</td><td>Fun</td><td>Easy</td><td><span class="badge">Done</span></td></tr><tr><td>2</td><td>Truth or Dare</td><td>Party</td><td>Easy</td><td><span class="badge">Done</span></td></tr><tr><td>3</td><td>Rock Paper Scissors</td><td>Game</td><td>Easy</td><td><span class="badge">Done</span></td></tr><tr><td>4</td><td>Reaction Time</td><td>Challenge</td><td>Medium</td><td><span class="badge">Done</span></td></tr><tr><td>5</td><td>Magic 8-Ball</td><td>Fun</td><td>Easy</td><td><span class="badge">Done</span></td></tr></tbody></table></section>
+    </section>
+    <section id="jokeScreen" class="screen"><div class="game-panel"><div class="game-header"><h2>😂 Joke Generator</h2><button class="back-btn">← Back Home</button></div><div id="jokeOutput" class="result-box">Click the button for a joke.</div><button id="newJokeBtn" class="primary-btn">Generate Joke</button></div></section>
+    <section id="truthScreen" class="screen"><div class="game-panel"><div class="game-header"><h2>🎲 Truth or Dare</h2><button class="back-btn">← Back Home</button></div><div id="truthOutput" class="result-box">Choose Truth or Dare.</div><div class="row"><button id="truthBtn" class="choice-btn">Truth</button><button id="dareBtn" class="choice-btn">Dare</button></div></div></section>
+    <section id="rpsScreen" class="screen"><div class="game-panel"><div class="game-header"><h2>✊ Rock Paper Scissors</h2><button class="back-btn">← Back Home</button></div><div class="scoreboard"><div class="score"><strong id="userScore">0</strong><span>You</span></div><div class="score"><strong id="drawScore">0</strong><span>Draws</span></div><div class="score"><strong id="computerScore">0</strong><span>Computer</span></div></div><div id="rpsOutput" class="result-box">Choose your move.</div><div class="row"><button class="choice-btn rps-choice" data-choice="rock">✊ Rock</button><button class="choice-btn rps-choice" data-choice="paper">✋ Paper</button><button class="choice-btn rps-choice" data-choice="scissors">✌️ Scissors</button></div></div></section>
+    <section id="reactionScreen" class="screen"><div class="game-panel"><div class="game-header"><h2>⚡ Reaction Time</h2><button class="back-btn">← Back Home</button></div><div id="reactionBox" class="reaction-box">Click Start</div><button id="reactionStart" class="primary-btn">Start</button><p class="small-note">Wait until the box turns green. If you click too early, you lose that round.</p></div></section>
+    <section id="eightBallScreen" class="screen"><div class="game-panel"><div class="game-header"><h2>🔮 Magic 8-Ball</h2><button class="back-btn">← Back Home</button></div><div id="eightBallOutput" class="result-box">Ask a question in your mind, then click.</div><button id="eightBallBtn" class="primary-btn">Reveal Answer</button></div></section>
+  </main>
+  <script>
+    const homeScreen=document.getElementById('homeScreen'); const screens=document.querySelectorAll('.screen');
+    function openScreen(id){homeScreen.style.display='none'; screens.forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});}
+    function backHome(){screens.forEach(s=>s.classList.remove('active')); homeScreen.style.display='block'; window.scrollTo({top:0,behavior:'smooth'});}
+    document.querySelectorAll('[data-open]').forEach(c=>c.addEventListener('click',()=>openScreen(c.dataset.open))); document.querySelectorAll('.back-btn').forEach(b=>b.addEventListener('click',backHome));
+    const jokes=['Why did the computer go to therapy? It had too many tabs open.','I told my code a joke, but it did not react. It had no event listener.','Why do programmers prefer dark mode? Because light attracts bugs.','My Wi-Fi and I are in a long-distance relationship.','I asked JavaScript for commitment. It said: undefined.'];
+    document.getElementById('newJokeBtn').addEventListener('click',()=>{document.getElementById('jokeOutput').textContent=jokes[Math.floor(Math.random()*jokes.length)];});
+    const truths=['What is one thing you searched online that you would not want others to see?','What is the funniest thing you believed as a child?','What is one habit you know you should stop?','Who was your first crush?','What is the most embarrassing thing you have done recently?'];
+    const dares=['Speak in a movie villain voice for 30 seconds.','Do your best celebrity impression.','Send a funny emoji to the last person you texted.','Dance for 10 seconds without music.','Say the alphabet backwards as far as you can.'];
+    document.getElementById('truthBtn').addEventListener('click',()=>{document.getElementById('truthOutput').textContent=truths[Math.floor(Math.random()*truths.length)];});
+    document.getElementById('dareBtn').addEventListener('click',()=>{document.getElementById('truthOutput').textContent=dares[Math.floor(Math.random()*dares.length)];});
+    let userScore=0,computerScore=0,drawScore=0; function updateRpsScores(){document.getElementById('userScore').textContent=userScore;document.getElementById('computerScore').textContent=computerScore;document.getElementById('drawScore').textContent=drawScore;}
+    document.querySelectorAll('.rps-choice').forEach(btn=>btn.addEventListener('click',()=>{const choices=['rock','paper','scissors']; const user=btn.dataset.choice; const comp=choices[Math.floor(Math.random()*choices.length)]; let result; if(user===comp){drawScore++; result="It's a draw.";} else if((user==='rock'&&comp==='scissors')||(user==='paper'&&comp==='rock')||(user==='scissors'&&comp==='paper')){userScore++; result='You win!';} else {computerScore++; result='Computer wins!';} updateRpsScores(); document.getElementById('rpsOutput').textContent=`You chose ${user}. Computer chose ${comp}. ${result}`;}));
+    const reactionBox=document.getElementById('reactionBox'); const reactionStart=document.getElementById('reactionStart'); let reactionTimeout,reactionStartTime,reactionState='idle';
+    reactionStart.addEventListener('click',()=>{clearTimeout(reactionTimeout); reactionState='waiting'; reactionBox.className='reaction-box waiting'; reactionBox.textContent='Wait for green...'; reactionStart.disabled=true; const delay=Math.floor(Math.random()*3000)+1500; reactionTimeout=setTimeout(()=>{reactionState='ready'; reactionStartTime=Date.now(); reactionBox.className='reaction-box ready'; reactionBox.textContent='CLICK NOW!';},delay);});
+    reactionBox.addEventListener('click',()=>{if(reactionState==='waiting'){clearTimeout(reactionTimeout); reactionState='idle'; reactionBox.className='reaction-box'; reactionBox.textContent='Too early! Click Start again.'; reactionStart.disabled=false;} else if(reactionState==='ready'){const time=Date.now()-reactionStartTime; reactionState='idle'; reactionBox.className='reaction-box'; reactionBox.textContent=`Your reaction time: ${time} ms`; reactionStart.disabled=false;}});
+    const eightBallAnswers=['Yes, definitely.','No chance.','Maybe, but not today.','Ask again later.','It is looking good.','Very doubtful.','The vibes say yes.','Do not count on it.','Absolutely.','Only if you stop overthinking.'];
+    document.getElementById('eightBallBtn').addEventListener('click',()=>{document.getElementById('eightBallOutput').textContent=eightBallAnswers[Math.floor(Math.random()*eightBallAnswers.length)];});
+  </script>
+</body>
+</html>
