@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roast Me Bot - Timepass Hub</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <main class="site project-page">
+    <div class="topbar">
+      <a class="brand" href="../index.html">
+        <div class="logo">🎮</div>
+        <div>Timepass Hub</div>
+      </a>
+      <a class="nav-pill" href="../index.html">← Home</a>
+    </div>
+
+    <section class="game-panel">
+      
+<div class="game-header">
+  <h1>🔥 Roast Me Bot</h1>
+  <a class="back-btn" href="../index.html">← Back Home</a>
+</div>
+<input id="nameInput" class="text-input" placeholder="Enter your name..." />
+<div id="output" class="result-box">Enter your name and get roasted.</div>
+<button id="roast" class="primary-btn">Roast Me</button>
+<p class="small-note">Friendly roasts only. Nothing too serious.</p>
+
+    </section>
+  </main>
+
+  <script src="../js/main.js"></script>
+  <script>
+
+const roasts = [
+  "NAME, your browser history probably needs a lawyer.",
+  "NAME, you debug like you are negotiating with the code.",
+  "NAME, your Wi-Fi gives up when it sees you coming.",
+  "NAME, you have main character energy, but the script is still loading.",
+  "NAME, even your autocorrect says good luck."
+];
+
+document.getElementById("roast").addEventListener("click", () => {
+  const name = document.getElementById("nameInput").value.trim() || "Friend";
+  setText("output", pick(roasts).replace("NAME", name));
+});
+
+  </script>
+</body>
+</html>

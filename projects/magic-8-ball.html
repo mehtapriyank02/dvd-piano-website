@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magic 8-Ball - Timepass Hub</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <main class="site project-page">
+    <div class="topbar">
+      <a class="brand" href="../index.html">
+        <div class="logo">🎮</div>
+        <div>Timepass Hub</div>
+      </a>
+      <a class="nav-pill" href="../index.html">← Home</a>
+    </div>
+
+    <section class="game-panel">
+      
+<div class="game-header">
+  <h1>🔮 Magic 8-Ball</h1>
+  <a class="back-btn" href="../index.html">← Back Home</a>
+</div>
+<div id="output" class="result-box">Ask a question in your mind, then click.</div>
+<button id="reveal" class="primary-btn">Reveal Answer</button>
+
+    </section>
+  </main>
+
+  <script src="../js/main.js"></script>
+  <script>
+
+const answers = [
+  "Yes, definitely.",
+  "No chance.",
+  "Maybe, but not today.",
+  "Ask again later.",
+  "It is looking good.",
+  "Very doubtful.",
+  "The vibes say yes.",
+  "Do not count on it.",
+  "Absolutely.",
+  "Only if you stop overthinking."
+];
+
+document.getElementById("reveal").addEventListener("click", () => {
+  setText("output", pick(answers));
+});
+
+  </script>
+</body>
+</html>

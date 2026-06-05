@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Would You Rather - Timepass Hub</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <main class="site project-page">
+    <div class="topbar">
+      <a class="brand" href="../index.html">
+        <div class="logo">🎮</div>
+        <div>Timepass Hub</div>
+      </a>
+      <a class="nav-pill" href="../index.html">← Home</a>
+    </div>
+
+    <section class="game-panel">
+      
+<div class="game-header">
+  <h1>🤔 Would You Rather</h1>
+  <a class="back-btn" href="../index.html">← Back Home</a>
+</div>
+<div id="output" class="result-box">Click for a question.</div>
+<button id="generate" class="primary-btn">Generate Question</button>
+
+    </section>
+  </main>
+
+  <script src="../js/main.js"></script>
+  <script>
+
+const questions = [
+  "Would you rather never use your phone again or never watch movies again?",
+  "Would you rather be able to fly or become invisible?",
+  "Would you rather always be 10 minutes late or 30 minutes early?",
+  "Would you rather have unlimited pizza or unlimited coffee?",
+  "Would you rather live without music or live without games?"
+];
+
+document.getElementById("generate").addEventListener("click", () => {
+  setText("output", pick(questions));
+});
+
+  </script>
+</body>
+</html>

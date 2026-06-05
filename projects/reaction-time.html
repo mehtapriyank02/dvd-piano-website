@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reaction Time - Timepass Hub</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <main class="site project-page">
+    <div class="topbar">
+      <a class="brand" href="../index.html">
+        <div class="logo">🎮</div>
+        <div>Timepass Hub</div>
+      </a>
+      <a class="nav-pill" href="../index.html">← Home</a>
+    </div>
+
+    <section class="game-panel">
+      
+<div class="game-header">
+  <h1>⚡ Reaction Time</h1>
+  <a class="back-btn" href="../index.html">← Back Home</a>
+</div>
+<div id="reactionBox" class="reaction-box">Click Start</div>
+<button id="start" class="primary-btn">Start</button>
+<p class="small-note">Wait until the box turns green. If you click too early, you lose that round.</p>
+
+    </section>
+  </main>
+
+  <script src="../js/main.js"></script>
+  <script>
+
+const box = document.getElementById("reactionBox");
+const start = document.getElementById("start");
+let timeout;
+let startTime;
+let state = "idle";
+
+start.addEventListener("click", () => {
+  clearTimeout(timeout);
+  state = "waiting";
+  box.className = "reaction-box waiting";
+  box.textContent = "Wait for green...";
+  start.disabled = true;
+
+  const delay = Math.floor(Math.random() * 3000) + 1500;
+
+  timeout = setTimeout(() => {
+    state = "ready";
+    startTime = Date.now();
+    box.className = "reaction-box ready";
+    box.textContent = "CLICK NOW!";
+  }, delay);
+});
+
+box.addEventListener("click", () => {
+  if (state === "waiting") {
+    clearTimeout(timeout);
+    state = "idle";
+    box.className = "reaction-box";
+    box.textContent = "Too early! Click Start again.";
+    start.disabled = false;
+  } else if (state === "ready") {
+    const time = Date.now() - startTime;
+    state = "idle";
+    box.className = "reaction-box";
+    box.textContent = `Your reaction time: ${time} ms`;
+    start.disabled = false;
+  }
+});
+
+  </script>
+</body>
+</html>
