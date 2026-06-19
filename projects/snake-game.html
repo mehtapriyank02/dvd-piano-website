@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Snake Game - Timepass Hub</title><link rel="stylesheet" href="../css/style.css"></head><body>
+
+
+
+<header class="site-header">
+  <nav class="navbar">
+    <a class="brand" href="../index.html"><div class="brand-logo">🎮</div><span>Timepass Hub</span></a>
+    <ul class="nav-menu">
+      <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html#games">Games ▾</a>
+        <ul class="dropdown">
+          <li><a href="../projects/rock-paper-scissors.html">✊ Rock Paper Scissors</a></li>
+          <li><a href="../projects/reaction-time.html">⚡ Reaction Time</a></li>
+          <li><a href="../projects/memory-card-game.html">🧠 Memory Card Game</a></li>
+          <li><a href="../projects/snake-game.html">🐍 Snake Game</a></li>
+          <li><a href="../projects/flappy-bird.html">🐤 Flappy Bird</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html#bots">Fun Bots ▾</a>
+        <ul class="dropdown">
+          <li><a href="../projects/joke-generator.html">😂 Joke Generator</a></li>
+          <li><a href="../projects/meme-quotes.html">😎 Meme Quotes</a></li>
+          <li><a href="../projects/fake-chatbot.html">🤖 Fake Chatbot</a></li>
+          <li><a href="../projects/roast-me.html">🔥 Roast Me</a></li>
+          <li><a href="../projects/compliment-bot.html">🌟 Compliment Bot</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html#tools">Tools ▾</a>
+        <ul class="dropdown">
+          <li><a href="../projects/truth-or-dare.html">🎲 Truth or Dare</a></li>
+          <li><a href="../projects/typing-speed-test.html">⌨️ Typing Speed Test</a></li>
+          <li><a href="../projects/todo-list.html">✅ To-Do List</a></li>
+          <li><a href="../projects/notes-app.html">📝 Notes App</a></li>
+          <li><a href="../projects/qr-generator.html">◼️ QR Generator</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html#calculators">Calculators ▾</a>
+        <ul class="dropdown">
+          <li><a href="../projects/bmi-calculator.html">⚖️ BMI Calculator</a></li>
+          <li><a href="../projects/expense-calculator.html">💰 Expense Calculator</a></li>
+          <li><a href="../projects/currency-converter.html">💱 Currency Converter</a></li>
+          <li><a href="../projects/pomodoro-timer.html">🍅 Pomodoro Timer</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html#music">Music ▾</a>
+        <ul class="dropdown">
+          <li><a href="../projects/mini-piano.html">🎹 Mini Piano</a></li>
+          <li><a href="../projects/music-beat-pad.html">🎛️ Music Beat Pad</a></li>
+          <li><a href="../projects/drum-machine.html">🥁 Drum Machine</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html#utilities">Utilities ▾</a>
+        <ul class="dropdown">
+          <li><a href="../projects/dictionary-app.html">📖 Dictionary App</a></li>
+          <li><a href="../projects/movie-search.html">🍿 Movie Search</a></li>
+          <li><a href="../projects/weather-app.html">🌦️ Weather App</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="../index.html#sports">Sports ▾</a>
+        <ul class="dropdown">
+          <li><a href="../projects/sports-live.html">📺 Live Sports Scores</a></li>
+          <li><a href="../projects/cricket.html">🏏 Cricket</a></li>
+          <li><a href="../projects/football.html">⚽ Football</a></li>
+          <li><a href="../projects/f1.html">🏎️ F1</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a class="nav-cta" href="../index.html#contact">Contact</a>
+  </nav>
+</header>
+
+
+
+<main class="project-page"><section class="project-panel"><div class="project-head"><h1>🐍 Snake Game</h1><a class="btn btn-secondary back-home" href="../index.html">← Back Home</a></div>
+<canvas id="game" class="canvas-box" width="600" height="400"></canvas><div class="control-row"><button id="start" class="action-btn">Start / Restart</button></div><p class="small-note">Use arrow keys or WASD. On mobile, swipe may not be supported yet.</p>
+</section></main>
+<script src="../js/main.js"></script><script>
+const canvas=$('game'),ctx=canvas.getContext('2d');let snake,food,dir,loop,score;
+function reset(){snake=[{x:10,y:10}];food={x:15,y:10};dir={x:1,y:0};score=0;clearInterval(loop);loop=setInterval(tick,120)}
+function tick(){const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0||head.y<0||head.x>=30||head.y>=20||snake.some(p=>p.x===head.x&&p.y===head.y)){clearInterval(loop);draw();ctx.fillStyle='white';ctx.font='28px Arial';ctx.fillText('Game Over',220,200);return}snake.unshift(head);if(head.x===food.x&&head.y===food.y){score++;food={x:Math.floor(Math.random()*30),y:Math.floor(Math.random()*20)}}else snake.pop();draw()}
+function draw(){ctx.fillStyle='#070817';ctx.fillRect(0,0,600,400);ctx.fillStyle='#35ff9a';snake.forEach(p=>ctx.fillRect(p.x*20,p.y*20,18,18));ctx.fillStyle='#ff4ecd';ctx.fillRect(food.x*20,food.y*20,18,18);ctx.fillStyle='white';ctx.font='18px Arial';ctx.fillText('Score: '+score,12,24)}
+document.onkeydown=e=>{const k=e.key.toLowerCase();if((k==='arrowup'||k==='w')&&dir.y!==1)dir={x:0,y:-1};if((k==='arrowdown'||k==='s')&&dir.y!==-1)dir={x:0,y:1};if((k==='arrowleft'||k==='a')&&dir.x!==1)dir={x:-1,y:0};if((k==='arrowright'||k==='d')&&dir.x!==-1)dir={x:1,y:0}}
+$('start').onclick=reset;reset();
+</script></body></html>
